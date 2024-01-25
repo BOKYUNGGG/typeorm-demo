@@ -6,7 +6,7 @@ import { DataSource } from "typeorm"
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: '127.0.0.1',
+    host: 'localhost',
     port: 3306,
     username: 'workbench',
     password: process.env.PASSWORD,
@@ -16,4 +16,7 @@ export const AppDataSource = new DataSource({
     entities: ["src/entities/**/*.ts"],
     migrations: ["src/migrations/**/*.ts"],
     subscribers: [],
+    extra : {
+        insecureAuth : true
+    }
 })

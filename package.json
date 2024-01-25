@@ -10,7 +10,7 @@
    },
    "dependencies": {
       "dotenv": "^16.4.1",
-      "mysql": "^2.14.1",
+      "mysql" : "yarn:mysql2@^2.1.0",
       "reflect-metadata": "^0.1.13",
       "ssh2": "^1.15.0",
       "typeorm": "0.3.19"

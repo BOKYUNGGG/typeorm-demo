@@ -1,12 +1,17 @@
 import { AppDataSource } from "./data-source"
-import { UserEntity } from "./entity/User"
-import * as userService from './service/UserService'
+
+
 AppDataSource.initialize().then(async (app) => {
     console.log('run migrations')
-    app.undoLastMigration()
+    await app.runMigrations()
     
     
     
     
-
-}).catch(error => console.log(error))
+    console.log('Close Connection')
+    await app.destroy()
+}).catch(error => {
+    console.log('================================')
+    console.log(error)
+    console.log('================================')
+})
