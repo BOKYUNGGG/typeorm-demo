@@ -1,20 +1,19 @@
+require('dotenv').config()
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import { UserEntity } from "./entity/User"
-import { SessionEntity } from "./entity/Session"
-import { AccountEntity } from "./entity/Account"
-import { VerificationTokenEntity } from "./entity/VerificationToken"
+
+
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: process.env.HOST,
+    host: '127.0.0.1',
     port: 3306,
-    username: process.env.USERNAME,
+    username: 'workbench',
     password: process.env.PASSWORD,
-    database: process.env.DATABASE,
+    database: 'workbench',
     synchronize: true,
     logging: false,
-    entities: [UserEntity, SessionEntity, AccountEntity, VerificationTokenEntity],
+    entities: ["src/entities/**/*.ts"],
     migrations: ["src/migrations/**/*.ts"],
     subscribers: [],
 })

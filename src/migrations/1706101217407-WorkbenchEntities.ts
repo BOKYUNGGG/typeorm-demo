@@ -106,6 +106,11 @@ export class WorkbenchEntities1706101217407 implements MigrationInterface {
                         name : 'oauth_token',
                         type : 'varchar',
                         isNullable : true
+                    },
+                    {
+                        name : 'user',
+                        type : 'varchar',
+                        length : '36'
                     }
                 ]
             }),
@@ -138,6 +143,11 @@ export class WorkbenchEntities1706101217407 implements MigrationInterface {
                     {
                         name : 'expires',
                         type : 'varchar'
+                    },
+                    {
+                        name : 'user',
+                        type : 'varchar',
+                        length : '36'
                     }
                 ]
             }),
@@ -148,19 +158,41 @@ export class WorkbenchEntities1706101217407 implements MigrationInterface {
         await queryRunner.createForeignKey(
             'Account',
             new TableForeignKey({
-                columnNames : ['id'],
+                columnNames : ['user'],
                 referencedColumnNames : ['id'],
                 referencedTableName : 'User',
-                onDelete : 'CASCADE'
+                onDelete : 'CASCADE',
+                onUpdate : 'CASCADE'
             })
         )
-
-
+        await queryRunner.createForeignKey(
+            'Session',
+            new TableForeignKey({
+                columnNames : ['user'],
+                referencedColumnNames : ['id'],
+                referencedTableName : 'User',
+                onDelete : 'CASCADE',
+                onUpdate : 'CASCADE'
+            })
+        )
         
     } // up
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        const AccountTable = await queryRunner.getTable('Account')
+        const SessionTable = await queryRunner.getTable('Session')
+        const fk_account = AccountTable.foreignKeys.find(
+            (fk)=>fk.columnNames.indexOf('user') !== -1
+        )
+        const fk_session = SessionTable.foreignKeys.find(
+            (fk)=>fk.columnNames.indexOf('user') !== -1
+        )
+
+        await queryRunner.dropForeignKey('Session', fk_session)
+        await queryRunner.dropForeignKey('Account', fk_account)
         await queryRunner.dropTable('User')
+        await queryRunner.dropTable('Session')
+        await queryRunner.dropTable('Account')
     }
 
 }
